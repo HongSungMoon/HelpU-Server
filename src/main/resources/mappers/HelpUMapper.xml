@@ -73,7 +73,51 @@
     	)
     </insert>
     
+    <delete id="helpRemove" parameterType="com.helpu.model.request.ProviderRemove">
+    	delete from
+    		help
+    	where
+    		requester = #{requester} and provider = (select id from user where phone = #{phone})
+    </delete>
     
+    <select id="getProviders" parameterType="String" resultType="String">
+    	select
+    		provider
+    	from
+    		help
+    	where
+    		requester = #{requester}
+    </select>
     
-
+    <select id="getToken" parameterType="String" resultType="String">
+    	select
+    		token
+    	from
+    		user
+    	where
+    		id = #{id}
+    </select>
+    
+    <select id="getUserName" parameterType="String" resultType="String">
+    	select
+    		name
+    	from
+    		user
+    	where
+    		id = #{id}
+    </select>
+    
+    <select id="getProviderPhones" parameterType="String" resultType="List">
+    	select
+    		phone
+    	from 
+    		help
+    	join
+    		user
+    	on
+    		help.provider = user.id
+        where
+            help.requester = #{id};
+    </select>
+    
 </mapper>

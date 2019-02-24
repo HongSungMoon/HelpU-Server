@@ -1,10 +1,12 @@
 package com.helpu.database;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.helpu.model.request.Login;
+import com.helpu.model.request.ProviderRemove;
 import com.helpu.model.request.UserRegistration;
 
 @Mapper
@@ -21,5 +23,15 @@ public interface HelpUMapper {
 	String getIdByPhone(String phone);
 
 	String checkHelpRegistration(Map<String, Object> map);
+
+	List<String> getProviders(String requester);
+
+	String getToken(String id);
+
+	String getUserName(String id);
+
+	void helpRemove(ProviderRemove param);
+
+	List<String> getProviderPhones(String id);
 
 }

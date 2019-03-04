@@ -1,10 +1,9 @@
 package com.helpu;
 
+import java.io.UnsupportedEncodingException;
+
 import org.json.JSONException;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.helpu.service.impl.AndroidPushNotificationsServiceImpl;
 
@@ -18,8 +17,11 @@ public class HelpUApplicationTests {
 	@Test
 	public void contextLoads() {
 		try {
-			service.send(token,"한글");
+			service.send(token,"한글", "0,0", "");
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

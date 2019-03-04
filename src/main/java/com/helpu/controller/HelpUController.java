@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.helpu.model.request.GetProviderPhones;
+import com.helpu.model.request.GetUserInfo;
+import com.helpu.model.request.HelpAccept;
 import com.helpu.model.request.HelpRegistration;
 import com.helpu.model.request.HelpRequest;
 import com.helpu.model.request.Login;
@@ -17,6 +19,7 @@ import com.helpu.model.request.ProviderLocationRegistration;
 import com.helpu.model.request.ProviderRemove;
 import com.helpu.model.request.UserIdCheck;
 import com.helpu.model.request.UserRegistration;
+import com.helpu.model.request.UserUpdate;
 import com.helpu.model.response.wrapper.ResponseWrapper;
 import com.helpu.service.UserService;
 
@@ -49,6 +52,24 @@ public class HelpUController {
 	public ResponseEntity<ResponseWrapper> userLogin(@RequestBody Login param) {
 		
 		ResponseWrapper response = userService.userLogin(param);
+		
+		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/user/info", method = RequestMethod.POST)
+	public ResponseEntity<ResponseWrapper> getUserInfo(@RequestBody GetUserInfo param) {
+		
+		ResponseWrapper response = userService.getUserInfo(param);
+		
+		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/user/update", method = RequestMethod.POST)
+	public ResponseEntity<ResponseWrapper> userUpdate(@RequestBody UserUpdate param) {
+		
+		ResponseWrapper response = userService.userUpdate(param);
 		
 		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
 		
@@ -103,6 +124,15 @@ public class HelpUController {
 	public ResponseEntity<ResponseWrapper> providerCheck(@RequestBody ProviderLocationRegistration param) {
 		
 		ResponseWrapper response = userService.providerLocationRegistration(param);
+		
+		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/help/accept", method = RequestMethod.POST)
+	public ResponseEntity<ResponseWrapper> helpAccept(@RequestBody HelpAccept param) {
+		
+		ResponseWrapper response = userService.helpAccept(param);
 		
 		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
 		

@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import com.helpu.model.request.Login;
 import com.helpu.model.request.ProviderRemove;
 import com.helpu.model.request.UserRegistration;
+import com.helpu.model.request.UserUpdate;
+import com.helpu.model.response.GetUserInfoParam;
 
 @Mapper
 public interface HelpUMapper {
@@ -33,5 +35,9 @@ public interface HelpUMapper {
 	void helpRemove(ProviderRemove param);
 
 	List<String> getProviderPhones(String id);
+
+	GetUserInfoParam getUserInfo(String id);
+
+	void updateUser(UserUpdate param);
 
 }

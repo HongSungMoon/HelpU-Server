@@ -1,8 +1,12 @@
 package com.helpu.service;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.json.JSONException;
 
 import com.helpu.model.request.GetProviderPhones;
+import com.helpu.model.request.GetUserInfo;
+import com.helpu.model.request.HelpAccept;
 import com.helpu.model.request.HelpRegistration;
 import com.helpu.model.request.ProviderRemove;
 import com.helpu.model.request.HelpRequest;
@@ -10,6 +14,7 @@ import com.helpu.model.request.Login;
 import com.helpu.model.request.ProviderLocationRegistration;
 import com.helpu.model.request.UserIdCheck;
 import com.helpu.model.request.UserRegistration;
+import com.helpu.model.request.UserUpdate;
 import com.helpu.model.response.wrapper.ResponseWrapper;
 
 public interface UserService {
@@ -29,5 +34,15 @@ public interface UserService {
 	ResponseWrapper providerRemove(ProviderRemove param);
 
 	ResponseWrapper getProviderPhones(GetProviderPhones param);
+
+	ResponseWrapper getUserInfo(GetUserInfo param);
+
+	ResponseWrapper helpAccept(HelpAccept param);
+
+	ResponseWrapper userUpdate(UserUpdate param);
+	
+	ConcurrentHashMap<String, String> getHelpMap();
+	
+	ConcurrentHashMap<String, String> getLocationMap();
 
 }

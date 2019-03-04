@@ -1,5 +1,9 @@
 package com.helpu.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -7,6 +11,8 @@ import java.util.concurrent.ExecutionException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -23,39 +29,147 @@ public class AndroidPushNotificationsServiceImpl implements AndroidPushNotificat
 
 	@Override
 	@Async
-	public boolean send(String token, String msg) throws JSONException {
-		
+	public boolean send(String token, String msg, String location, String requester) throws JSONException, UnsupportedEncodingException {
+
 		JSONObject body = new JSONObject();
-		JSONObject to = new JSONObject();
-		JSONObject collapse_key = new JSONObject();
 		JSONObject notification = new JSONObject();
+		JSONObject data = new JSONObject();
 
 		body.put("to", token);
 		body.put("collapse_key", "type_a");
-		
+
 		notification.put("title", "HelpU");
 		notification.put("body", msg);
-		
+		notification.put("location", location);
+		notification.put("click_action", "OPEN_ACTIVITY_1");
+		data.put("location", location);
+		data.put("title", "HelpU");
+		data.put("message", msg);
+		data.put("requester", requester);
 		body.put("notification", notification);
-
-		HttpEntity<String> request = new HttpEntity<>(body.toString());
+		body.put("data", data);
+		
+		
+		HttpHeaders headers = new HttpHeaders();
+		Charset utf8 = Charset.forName("UTF-8");
+		MediaType mediaType = new MediaType("application", "json", utf8);
+		headers.setContentType(mediaType);
+		
+		System.out.println(body.toString());
+		HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
 
 		RestTemplate restTemplate = new RestTemplate();
-
-		/**
-		 * https://fcm.googleapis.com/fcm/send Content-Type:application/json
-		 * Authorization:key=FIREBASE_SERVER_KEY
-		 */
 
 		ArrayList<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
 		interceptors.add(new HeaderRequestInterceptor("Authorization", "key=" + FIREBASE_SERVER_KEY));
 		interceptors.add(new HeaderRequestInterceptor("Content-Type", "application/json"));
+
 		restTemplate.setInterceptors(interceptors);
 
 		String firebaseResponse = restTemplate.postForObject(FIREBASE_API_URL, request, String.class);
 
 		CompletableFuture<String> pushNotification = CompletableFuture.completedFuture(firebaseResponse);
+		CompletableFuture.allOf(pushNotification).join();
 
+		try {
+			String response = pushNotification.get();
+			return true;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+	
+	@Override
+	@Async
+	public boolean sendInfo(String token, String msg) throws JSONException, UnsupportedEncodingException {
+
+		JSONObject body = new JSONObject();
+		JSONObject notification = new JSONObject();
+
+		body.put("to", token);
+		body.put("collapse_key", "type_a");
+
+		notification.put("title", "HelpU");
+		notification.put("body", msg);
+		notification.put("click_action", "OPEN_ACTIVITY_2");
+		body.put("notification", notification);
+		
+		
+		HttpHeaders headers = new HttpHeaders();
+		Charset utf8 = Charset.forName("UTF-8");
+		MediaType mediaType = new MediaType("application", "json", utf8);
+		headers.setContentType(mediaType);
+		
+		System.out.println(body.toString());
+		HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		ArrayList<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
+		interceptors.add(new HeaderRequestInterceptor("Authorization", "key=" + FIREBASE_SERVER_KEY));
+		interceptors.add(new HeaderRequestInterceptor("Content-Type", "application/json"));
+
+		restTemplate.setInterceptors(interceptors);
+
+		String firebaseResponse = restTemplate.postForObject(FIREBASE_API_URL, request, String.class);
+
+		CompletableFuture<String> pushNotification = CompletableFuture.completedFuture(firebaseResponse);
+		CompletableFuture.allOf(pushNotification).join();
+
+		try {
+			String response = pushNotification.get();
+			return true;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+	
+	@Override
+	@Async
+	public boolean helpComplete(String token) throws JSONException, UnsupportedEncodingException {
+
+		JSONObject body = new JSONObject();
+		JSONObject notification = new JSONObject();
+		JSONObject data = new JSONObject();
+
+		body.put("to", token);
+		body.put("collapse_key", "type_a");
+
+		notification.put("title", "HelpU");
+		notification.put("body", "도움 제공을 완료하였습니다.");
+		notification.put("click_action", "OPEN_ACTIVITY_1");
+		data.put("title", "HelpU");
+		body.put("notification", notification);
+		body.put("data", data);
+		
+		
+		HttpHeaders headers = new HttpHeaders();
+		Charset utf8 = Charset.forName("UTF-8");
+		MediaType mediaType = new MediaType("application", "json", utf8);
+		headers.setContentType(mediaType);
+		
+		System.out.println(body.toString());
+		HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		ArrayList<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
+		interceptors.add(new HeaderRequestInterceptor("Authorization", "key=" + FIREBASE_SERVER_KEY));
+		interceptors.add(new HeaderRequestInterceptor("Content-Type", "application/json"));
+
+		restTemplate.setInterceptors(interceptors);
+
+		String firebaseResponse = restTemplate.postForObject(FIREBASE_API_URL, request, String.class);
+
+		CompletableFuture<String> pushNotification = CompletableFuture.completedFuture(firebaseResponse);
 		CompletableFuture.allOf(pushNotification).join();
 
 		try {

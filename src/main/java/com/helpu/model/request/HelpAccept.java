@@ -1,6 +1,6 @@
 package com.helpu.model.request;
 
-public class HelpRegistration {
+public class HelpAccept {
 
 	private String requester;
 	private String provider;
@@ -9,10 +9,9 @@ public class HelpRegistration {
 		return requester;
 	}
 
-	public void setRequestor(String requester) {
+	public void setRequester(String requester) {
 		this.requester = requester;
 	}
-
 
 	public String getProvider() {
 		return provider;
@@ -21,10 +20,5 @@ public class HelpRegistration {
 	public void setProvider(String provider) {
 		this.provider = provider;
 	}
-
-	public void setRequester(String requester) {
-		this.requester = requester;
-	}
-
 
 }

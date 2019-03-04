@@ -12,7 +12,8 @@
     		personal_no,
     		gender,
     		user_type,
-    		token
+    		token,
+    		address
     	) 
     	values (
     		#{id},
@@ -22,7 +23,8 @@
     		#{personal_no},
     		#{gender},
     		#{user_type},
-    		#{token}
+    		#{token},
+    		#{address}
     	)
     </insert>
     
@@ -107,7 +109,7 @@
     		id = #{id}
     </select>
     
-    <select id="getProviderPhones" parameterType="String" resultType="List">
+    <select id="getProviderPhones" parameterType="String" resultType="String">
     	select
     		phone
     	from 
@@ -119,5 +121,23 @@
         where
             help.requester = #{id};
     </select>
+    
+    <select id="getUserInfo" parameterType="String" resultType="com.helpu.model.response.GetUserInfoParam">
+    	select
+    		name,address, phone, grade, point, count
+    	from 
+    		user
+    	where
+    		id = #{id}
+    </select>
+    
+    <update id="updateUser" parameterType="com.helpu.model.request.UserUpdate">
+    	update
+    		user
+    	set
+    		name =#{name}, phone = #{phone}, address = #{address}
+    	where
+    		id = #{id}
+    </update>
     
 </mapper>

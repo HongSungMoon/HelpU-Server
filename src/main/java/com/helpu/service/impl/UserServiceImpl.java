@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
 
 	public static ConcurrentHashMap<String, String> locationMap = new ConcurrentHashMap<>();
 	public static ConcurrentHashMap<String, String> helpMap = new ConcurrentHashMap<>();
+	public static ConcurrentHashMap<String, Boolean> startMap = new ConcurrentHashMap<>();
 
 	public DistanceUtil distanceUtil = new DistanceUtil();
 
@@ -173,6 +174,8 @@ public class UserServiceImpl implements UserService {
 
 		String requester = param.getRequester();
 		List<String> providers = helpuMapper.getProviders(requester);
+		
+		
 
 		if (providers.size() < 1) {
 			wrapper.setResultCode(106);
@@ -190,6 +193,14 @@ public class UserServiceImpl implements UserService {
 			distances.add(distance);
 		}
 
+		if(startMap.containsKey(requester)) {
+			wrapper.setResultCode(107);
+			wrapper.setMessage("이미 도움 요청이 진행중입니다.");
+			return wrapper;
+		}
+		
+		startMap.put(requester, true);
+		
 		String name = helpuMapper.getUserName(requester);
 		Thread t = new Thread() {
 			public void run() {
@@ -208,6 +219,7 @@ public class UserServiceImpl implements UserService {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+							startMap.remove(requester);
 							return;
 						}
 
@@ -229,7 +241,7 @@ public class UserServiceImpl implements UserService {
 							}
 							providers.remove(minIdx);
 							distances.remove(minIdx);
-							Thread.sleep(10000);
+							Thread.sleep(40000);
 						} catch (JSONException e) {
 							e.printStackTrace();
 						} catch (InterruptedException e) {
@@ -248,6 +260,7 @@ public class UserServiceImpl implements UserService {
 							} catch (JSONException | UnsupportedEncodingException e) {
 								e.printStackTrace();
 							}
+							startMap.remove(requester);
 							return;
 						}
 					}

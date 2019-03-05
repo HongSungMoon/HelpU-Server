@@ -29,7 +29,7 @@ public class HelpScheduler {
 	
 	public DistanceUtil distanceUtil = new DistanceUtil();
 	
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 10000)
 	public void helpScheduler() throws UnsupportedEncodingException, JSONException{
 		
 		Iterator<String> iterator = UserServiceImpl.helpMap.keySet().iterator();
@@ -52,6 +52,8 @@ public class HelpScheduler {
 	        	
 //	        	pushService.helpComplete(requesterToken);
 	        	pushService.helpComplete(providerToken);
+	        	
+	        	helpuMapper.addHelpCount(provider);
 	        	
 	        	UserServiceImpl.helpMap.remove(requester);
 	        	System.out.println("[scheduler] Success!!!!!!!!!!!!1");

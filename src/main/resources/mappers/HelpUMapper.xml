@@ -140,4 +140,13 @@
     		id = #{id}
     </update>
     
+    <update id="addHelpCount" parameterType="String">
+    	update
+    		user
+    	set
+    		count = count + 1
+    	where
+    		id = #{id}
+    </update>
+    
 </mapper>

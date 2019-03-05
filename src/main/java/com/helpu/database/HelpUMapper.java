@@ -40,4 +40,6 @@ public interface HelpUMapper {
 
 	void updateUser(UserUpdate param);
 
+	void addHelpCount(String provider);
+
 }

@@ -127,8 +127,11 @@ public class UserServiceImpl implements UserService {
 	public ResponseWrapper helpRegistration(HelpRegistration param) {
 
 		ResponseWrapper wrapper = createWrapper();
+		
+		String phone = param.getProvider();
+		phone = phone.replaceAll("-", "");
 
-		String id = helpuMapper.getIdByPhone(param.getProvider());
+		String id = helpuMapper.getIdByPhone(phone);
 
 		if (id == null) {
 			wrapper.setResultCode(104);

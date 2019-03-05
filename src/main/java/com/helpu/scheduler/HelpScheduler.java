@@ -50,7 +50,7 @@ public class HelpScheduler {
 	        	String requesterToken = helpuMapper.getToken(requester);
 	        	String providerToken = helpuMapper.getToken(provider);
 	        	
-//	        	pushService.helpComplete(requesterToken);
+	        	pushService.sendInfo(requesterToken,"도움 받기가 성공적으로 끝났습니다.");
 	        	pushService.helpComplete(providerToken);
 	        	
 	        	helpuMapper.addHelpCount(provider);

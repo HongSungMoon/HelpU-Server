@@ -27,6 +27,7 @@ import com.helpu.model.response.GetProviderPhonesParam;
 import com.helpu.model.response.GetUserInfoParam;
 import com.helpu.model.response.LoginResponse;
 import com.helpu.model.response.wrapper.ResponseWrapper;
+import com.helpu.scheduler.HelpScheduler;
 import com.helpu.service.UserService;
 import com.helpu.utils.DistanceUtil;
 
@@ -41,6 +42,9 @@ public class UserServiceImpl implements UserService {
 	public static ConcurrentHashMap<String, Boolean> startMap = new ConcurrentHashMap<>();
 
 	public DistanceUtil distanceUtil = new DistanceUtil();
+
+	@Autowired
+	private HelpScheduler helpScheduler;
 
 	@Autowired
 	private HelpUMapper helpuMapper;
@@ -203,7 +207,7 @@ public class UserServiceImpl implements UserService {
 			distances.add(distance);
 		}
 
-		if (startMap.containsKey(requester)) {
+		if (startMap.containsKey(requester) || helpMap.contains(requester)) {
 			wrapper.setResultCode(107);
 			wrapper.setMessage("이미 도움 요청이 진행중입니다.");
 			return wrapper;
@@ -252,32 +256,38 @@ public class UserServiceImpl implements UserService {
 							}
 							providers.remove(minIdx);
 							distances.remove(minIdx);
-							Thread.sleep(40000);
 						} catch (JSONException e) {
-							e.printStackTrace();
-						} catch (InterruptedException e) {
 							e.printStackTrace();
 						} catch (UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 
-						if (helpMap.get(requester) != null) {
-							String token = helpuMapper.getToken(requester);
-							String providerName = helpuMapper.getUserName(helpMap.get(requester));
-							// helpMap.remove(requester);
+						for (int i = 0; i < 8; i++) {
 							try {
-								pushService.sendInfo(token, providerName + "님으로부터 요청 승낙을 받았습니다.");
-							} catch (JSONException | UnsupportedEncodingException e) {
-								e.printStackTrace();
+								Thread.sleep(5000);
+							} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
 							}
-							startMap.remove(requester);
-							return;
+							if (helpMap.get(requester) != null) {
+								String token = helpuMapper.getToken(requester);
+								String providerName = helpuMapper.getUserName(helpMap.get(requester));
+								startMap.remove(requester);
+								try {
+									pushService.sendInfo(token, providerName + "님으로부터 요청 승낙을 받았습니다.");
+								} catch (JSONException | UnsupportedEncodingException e) {
+									e.printStackTrace();
+								}
+
+								return;
+							}
 						}
 					}
 				}
 			}
 		};
+
 		t.start();
 
 		return wrapper;

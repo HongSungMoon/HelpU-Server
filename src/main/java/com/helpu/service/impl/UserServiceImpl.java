@@ -107,6 +107,14 @@ public class UserServiceImpl implements UserService {
 			wrapper.setMessage("Password가 일치하지 않습니다.");
 			return wrapper;
 		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("token", param.getToken());
+		map.put("id", param.getId());
+		
+		helpuMapper.updateToken(map);
+		
+		System.out.println("[update token]" + map.get("id") + " : " + map.get("token"));
 
 		LoginResponse response = new LoginResponse();
 		response.setUser_type(user_type);

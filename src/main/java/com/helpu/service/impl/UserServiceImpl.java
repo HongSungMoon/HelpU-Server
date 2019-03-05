@@ -107,14 +107,14 @@ public class UserServiceImpl implements UserService {
 			wrapper.setMessage("Password가 일치하지 않습니다.");
 			return wrapper;
 		}
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("token", param.getToken());
-		map.put("id", param.getId());
-		
-		helpuMapper.updateToken(map);
-		
-		System.out.println("[update token]" + map.get("id") + " : " + map.get("token"));
+
+		if (param.getToken() != null) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("token", param.getToken());
+			map.put("id", param.getId());
+			helpuMapper.updateToken(map);
+			System.out.println("[update token]" + map.get("id") + " : " + map.get("token"));
+		}
 
 		LoginResponse response = new LoginResponse();
 		response.setUser_type(user_type);
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseWrapper helpRegistration(HelpRegistration param) {
 
 		ResponseWrapper wrapper = createWrapper();
-		
+
 		String phone = param.getProvider();
 		phone = phone.replaceAll("-", "");
 
@@ -185,51 +185,50 @@ public class UserServiceImpl implements UserService {
 
 		String requester = param.getRequester();
 		List<String> providers = helpuMapper.getProviders(requester);
-		
-		
 
 		if (providers.size() < 1) {
 			wrapper.setResultCode(106);
 			wrapper.setMessage("등록된 도움 제공자가 없습니다.");
 			return wrapper;
 		}
-		
+
 		locationMap.put(param.getRequester(), param.getLocation());
 
 		List<Double> distances = new ArrayList<Double>();
 		System.out.println("distances");
 		for (int i = 0; i < providers.size(); i++) {
 			double distance = distanceUtil.calDistance(param.getLocation(), locationMap.get(providers.get(i)));
-//			System.out.println("provider : " + providers.get(i) + "  distance : " + distance);
+			// System.out.println("provider : " + providers.get(i) + " distance
+			// : " + distance);
 			distances.add(distance);
 		}
 
-		if(startMap.containsKey(requester)) {
+		if (startMap.containsKey(requester)) {
 			wrapper.setResultCode(107);
 			wrapper.setMessage("이미 도움 요청이 진행중입니다.");
 			return wrapper;
 		}
-		
+
 		startMap.put(requester, true);
-		
+
 		String name = helpuMapper.getUserName(requester);
 		Thread t = new Thread() {
 			public void run() {
 				int num = param.getCount();
-				if(num == 0)
+				if (num == 0)
 					num = 1;
 				for (int k = 0; k < num; k++) {
 					while (true) {
 						if (distances.size() == 0) {
 							String token = helpuMapper.getToken(requester);
 							if (!helpMap.containsKey(requester))
-//								helpMap.remove(requester);
-							try {
-								pushService.sendInfo(token, "도움 제공자 요청에 실패하였습니다.");
-							} catch (JSONException | UnsupportedEncodingException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+								// helpMap.remove(requester);
+								try {
+									pushService.sendInfo(token, "도움 제공자 요청에 실패하였습니다.");
+								} catch (JSONException | UnsupportedEncodingException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							startMap.remove(requester);
 							return;
 						}
@@ -245,7 +244,8 @@ public class UserServiceImpl implements UserService {
 						try {
 							String token = helpuMapper.getToken(providers.get(minIdx));
 							if (param.getMessage() == null) {
-								pushService.send(token, name + "님으로부터 도움 요청을 받았습니다.", param.getLocation(), param.getRequester());
+								pushService.send(token, name + "님으로부터 도움 요청을 받았습니다.", param.getLocation(),
+										param.getRequester());
 							} else {
 								pushService.send(token, name + "님으로부터 도움 요청을 받았습니다. " + param.getMessage(),
 										param.getLocation(), param.getRequester());
@@ -265,7 +265,7 @@ public class UserServiceImpl implements UserService {
 						if (helpMap.get(requester) != null) {
 							String token = helpuMapper.getToken(requester);
 							String providerName = helpuMapper.getUserName(helpMap.get(requester));
-//							helpMap.remove(requester);
+							// helpMap.remove(requester);
 							try {
 								pushService.sendInfo(token, providerName + "님으로부터 요청 승낙을 받았습니다.");
 							} catch (JSONException | UnsupportedEncodingException e) {
@@ -290,12 +290,13 @@ public class UserServiceImpl implements UserService {
 		ResponseWrapper wrapper = createWrapper();
 		String preDistance = locationMap.get(param.getProvider());
 		System.out.println("provider : " + param.getProvider() + "   location : " + param.getLocation());
-		if(param.getLocation() != null)
+		if (param.getLocation() != null)
 			locationMap.put(param.getProvider(), param.getLocation());
 
 		if (preDistance != null) {
 			double distance = distanceUtil.calDistance(param.getLocation(), preDistance);
-//			System.out.println(preDistance + " to " + param.getLocation() + "  : " + distance + " M");
+			// System.out.println(preDistance + " to " + param.getLocation() + "
+			// : " + distance + " M");
 		}
 
 		return wrapper;
@@ -334,8 +335,8 @@ public class UserServiceImpl implements UserService {
 	public ResponseWrapper helpAccept(HelpAccept param) {
 
 		ResponseWrapper wrapper = createWrapper();
-		
-		if(helpMap.containsKey(param.getRequester())) {
+
+		if (helpMap.containsKey(param.getRequester())) {
 			wrapper.setResultCode(100);
 			wrapper.setMessage("이미 다른 도움 제공자가 수락하였습니다.");
 		}
@@ -356,11 +357,11 @@ public class UserServiceImpl implements UserService {
 		return wrapper;
 
 	}
-	
+
 	public ConcurrentHashMap<String, String> getHelpMap() {
 		return this.helpMap;
 	}
-	
+
 	public ConcurrentHashMap<String, String> getLocationMap() {
 		return this.locationMap;
 	}

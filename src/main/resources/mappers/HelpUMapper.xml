@@ -149,4 +149,13 @@
     		id = #{id}
     </update>
     
+    <update id="updateToken" parameterType="Map">
+    	update
+    		user
+    	set
+    		token = #{token}
+    	where
+    		id = #{id}
+    </update>
+    
 </mapper>

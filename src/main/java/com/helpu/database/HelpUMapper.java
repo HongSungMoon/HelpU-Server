@@ -42,4 +42,6 @@ public interface HelpUMapper {
 
 	void addHelpCount(String provider);
 
+	void updateToken(Map<String, Object> map);
+
 }

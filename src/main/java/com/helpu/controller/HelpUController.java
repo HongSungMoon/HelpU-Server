@@ -31,6 +31,9 @@ public class HelpUController {
 	@Autowired
 	private UserService userService;
 	
+	/*
+	 * id 중복체크 확인 API
+	 * */
 	@RequestMapping(value = "/user/id/check", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> idCheck(@RequestBody UserIdCheck param) {
 		
@@ -40,6 +43,9 @@ public class HelpUController {
 		
 	}
 	
+	/*
+	 * 회원 가입 API
+	 * */
 	@RequestMapping(value = "/user/registration", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> userRegistration(@RequestBody UserRegistration param) {
 		
@@ -49,6 +55,9 @@ public class HelpUController {
 		
 	}
 	
+	/*
+	 * 로그인 API
+	 * */
 	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> userLogin(@RequestBody Login param) {
 		
@@ -58,6 +67,9 @@ public class HelpUController {
 		
 	}
 	
+	/*
+	 * 회원정보 가져오는 API
+	 * */
 	@RequestMapping(value = "/user/info", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> getUserInfo(@RequestBody GetUserInfo param) {
 		
@@ -67,6 +79,9 @@ public class HelpUController {
 		
 	}
 	
+	/*
+	 * 회원정보 업데이트 API
+	 * */
 	@RequestMapping(value = "/user/update", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> userUpdate(@RequestBody UserUpdate param) {
 		
@@ -85,6 +100,9 @@ public class HelpUController {
 		
 	}
 	
+	/*
+	 * 도움제공자 등록 API
+	 * */
 	@RequestMapping(value = "/help/registration", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> helpRegistration(@RequestBody HelpRegistration param) {
 		
@@ -94,6 +112,9 @@ public class HelpUController {
 		
 	}
 	
+	/*
+	 * 도움제공자 삭제 API
+	 * */
 	@RequestMapping(value = "/help/remove", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> providerRemove(@RequestBody ProviderRemove param) {
 		
@@ -103,6 +124,9 @@ public class HelpUController {
 		
 	}
 	
+	/*
+	 * 도움 요청 API
+	 * */
 	@RequestMapping(value = "/help/request", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> helpRequest(@RequestBody HelpRequest param) throws JSONException {
 		
@@ -112,6 +136,9 @@ public class HelpUController {
 		
 	}
 	
+	/*
+	 * 도움 제공자 위치 등록 API
+	 * */
 	@RequestMapping(value = "/provider/location", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> providerLocationRegistratin(@RequestBody ProviderLocationRegistration param) {
 		
@@ -120,16 +147,10 @@ public class HelpUController {
 		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
 		
 	}
-	
-	@RequestMapping(value = "/provider/check", method = RequestMethod.POST)
-	public ResponseEntity<ResponseWrapper> providerCheck(@RequestBody ProviderLocationRegistration param) {
-		
-		ResponseWrapper response = userService.providerLocationRegistration(param);
-		
-		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
-		
-	}
-	
+
+	/*
+	 * 도움 수락 API
+	 * */
 	@RequestMapping(value = "/help/accept", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> helpAccept(@RequestBody HelpAccept param) {
 		
@@ -139,6 +160,9 @@ public class HelpUController {
 		
 	}
 	
+	/*
+	 * 알람 설정 API
+	 * */
 	@RequestMapping(value = "/user/alarm", method = RequestMethod.POST)
 	public ResponseEntity<ResponseWrapper> setAlarm(@RequestBody SetAlarm param) {
 		

@@ -20,6 +20,7 @@ import com.helpu.model.request.HelpRequest;
 import com.helpu.model.request.Login;
 import com.helpu.model.request.ProviderLocationRegistration;
 import com.helpu.model.request.ProviderRemove;
+import com.helpu.model.request.SetAlarm;
 import com.helpu.model.request.UserIdCheck;
 import com.helpu.model.request.UserRegistration;
 import com.helpu.model.request.UserUpdate;
@@ -374,6 +375,24 @@ public class UserServiceImpl implements UserService {
 
 	public ConcurrentHashMap<String, String> getLocationMap() {
 		return this.locationMap;
+	}
+
+	@Override
+	public ResponseWrapper setAlarm(SetAlarm param) {
+		
+		ResponseWrapper wrapper = createWrapper();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", param.getId());
+		if(param.isAlarm()) {
+			map.put("alarm", "on");
+		} else {
+			map.put("alarm", "off");
+		}
+		
+		helpuMapper.setAlarm(map);
+
+		return wrapper;
+		
 	}
 
 }

@@ -17,6 +17,7 @@ import com.helpu.model.request.HelpRequest;
 import com.helpu.model.request.Login;
 import com.helpu.model.request.ProviderLocationRegistration;
 import com.helpu.model.request.ProviderRemove;
+import com.helpu.model.request.SetAlarm;
 import com.helpu.model.request.UserIdCheck;
 import com.helpu.model.request.UserRegistration;
 import com.helpu.model.request.UserUpdate;
@@ -133,6 +134,15 @@ public class HelpUController {
 	public ResponseEntity<ResponseWrapper> helpAccept(@RequestBody HelpAccept param) {
 		
 		ResponseWrapper response = userService.helpAccept(param);
+		
+		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/user/alarm", method = RequestMethod.POST)
+	public ResponseEntity<ResponseWrapper> setAlarm(@RequestBody SetAlarm param) {
+		
+		ResponseWrapper response = userService.setAlarm(param);
 		
 		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
 		

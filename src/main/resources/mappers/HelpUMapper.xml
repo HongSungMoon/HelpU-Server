@@ -87,8 +87,12 @@
     		provider
     	from
     		help
+        join
+            user
+        on
+            help.provider = user.id
     	where
-    		requester = #{requester}
+    		requester = #{requester} and alarm = 'on'
     </select>
     
     <select id="getToken" parameterType="String" resultType="String">
@@ -154,6 +158,15 @@
     		user
     	set
     		token = #{token}
+    	where
+    		id = #{id}
+    </update>
+    
+    <update id="setAlarm" parameterType="Map">
+    	update
+    		user
+    	set
+    		alarm = #{alarm}
     	where
     		id = #{id}
     </update>

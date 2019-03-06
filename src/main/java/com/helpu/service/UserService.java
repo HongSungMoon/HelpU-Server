@@ -9,6 +9,7 @@ import com.helpu.model.request.GetUserInfo;
 import com.helpu.model.request.HelpAccept;
 import com.helpu.model.request.HelpRegistration;
 import com.helpu.model.request.ProviderRemove;
+import com.helpu.model.request.SetAlarm;
 import com.helpu.model.request.HelpRequest;
 import com.helpu.model.request.Login;
 import com.helpu.model.request.ProviderLocationRegistration;
@@ -44,5 +45,7 @@ public interface UserService {
 	ConcurrentHashMap<String, String> getHelpMap();
 	
 	ConcurrentHashMap<String, String> getLocationMap();
+
+	ResponseWrapper setAlarm(SetAlarm param);
 
 }

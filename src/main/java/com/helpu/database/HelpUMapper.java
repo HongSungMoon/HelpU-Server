@@ -44,4 +44,6 @@ public interface HelpUMapper {
 
 	void updateToken(Map<String, Object> map);
 
+	void setAlarm(Map<String, Object> map);
+
 }

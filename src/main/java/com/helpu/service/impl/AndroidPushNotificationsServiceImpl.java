@@ -49,7 +49,6 @@ public class AndroidPushNotificationsServiceImpl implements AndroidPushNotificat
 		body.put("notification", notification);
 		body.put("data", data);
 		
-		
 		HttpHeaders headers = new HttpHeaders();
 		Charset utf8 = Charset.forName("UTF-8");
 		MediaType mediaType = new MediaType("application", "json", utf8);

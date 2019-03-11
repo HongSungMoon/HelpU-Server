@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.helpu.model.request.Login;
+import com.helpu.model.request.Logout;
 import com.helpu.model.request.ProviderRemove;
 import com.helpu.model.request.UserRegistration;
 import com.helpu.model.request.UserUpdate;
@@ -26,9 +27,13 @@ public interface HelpUMapper {
 
 	String checkHelpRegistration(Map<String, Object> map);
 
-	List<String> getProviders(String requester);
+//	List<String> getProviders(String requester);
+	
+	List<String> getProviders();
 
 	String getToken(String id);
+	
+	String getTokenByIdx(String id);
 
 	String getUserName(String id);
 
@@ -45,5 +50,9 @@ public interface HelpUMapper {
 	void updateToken(Map<String, Object> map);
 
 	void setAlarm(Map<String, Object> map);
+
+	void updateLogin(Login param);
+
+	void updateLogout(Logout param);
 
 }

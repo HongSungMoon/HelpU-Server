@@ -82,7 +82,8 @@
     		requester = #{requester} and provider = (select id from user where phone = #{phone})
     </delete>
     
-    <select id="getProviders" parameterType="String" resultType="String">
+    <!-- <select id="getProviders" parameterType="String" resultType="String">
+    
     	select
     		provider
     	from
@@ -93,9 +94,27 @@
             help.provider = user.id
     	where
     		requester = #{requester} and alarm = 'on'
+    </select> -->
+    
+    <select id="getProviders" parameterType="String" resultType="String">
+    	select
+    		phone
+    	from 
+    		user
+        where
+            user_type = 'provider' and login = 'on';
     </select>
     
     <select id="getToken" parameterType="String" resultType="String">
+    	select
+    		token
+    	from
+    		user
+    	where
+    		phone = #{phone}
+    </select>
+    
+     <select id="getTokenByIdx" parameterType="String" resultType="String">
     	select
     		token
     	from
@@ -167,6 +186,24 @@
     		user
     	set
     		alarm = #{alarm}
+    	where
+    		id = #{id}
+    </update>
+    
+    <update id="updateLogin" parameterType="com.helpu.model.request.Login">
+    	update
+    		user
+    	set
+    		login = 'on'
+    	where
+    		id = #{id}
+    </update>
+    
+    <update id="updateLogout" parameterType="com.helpu.model.request.Logout">
+    	update
+    		user
+    	set
+    		login = 'off'
     	where
     		id = #{id}
     </update>

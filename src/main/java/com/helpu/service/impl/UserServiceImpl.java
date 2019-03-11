@@ -18,6 +18,7 @@ import com.helpu.model.request.HelpAccept;
 import com.helpu.model.request.HelpRegistration;
 import com.helpu.model.request.HelpRequest;
 import com.helpu.model.request.Login;
+import com.helpu.model.request.Logout;
 import com.helpu.model.request.ProviderLocationRegistration;
 import com.helpu.model.request.ProviderRemove;
 import com.helpu.model.request.SetAlarm;
@@ -120,7 +121,7 @@ public class UserServiceImpl implements UserService {
 			helpuMapper.updateToken(map);
 			System.out.println("[update token]" + map.get("id") + " : " + map.get("token"));
 		}
-
+		helpuMapper.updateLogin(param);
 		LoginResponse response = new LoginResponse();
 		response.setUser_type(user_type);
 		wrapper.setParam(response);
@@ -189,11 +190,11 @@ public class UserServiceImpl implements UserService {
 		locationMap.put("test6", "100,100");
 
 		String requester = param.getRequester();
-		List<String> providers = helpuMapper.getProviders(requester);
+		List<String> providers = helpuMapper.getProviders();
 
 		if (providers.size() < 1) {
 			wrapper.setResultCode(106);
-			wrapper.setMessage("등록된 도움 제공자가 없습니다.");
+			wrapper.setMessage("로그인 된 도움 제공자가 없습니다.");
 			return wrapper;
 		}
 
@@ -259,9 +260,13 @@ public class UserServiceImpl implements UserService {
 							distances.remove(minIdx);
 						} catch (JSONException e) {
 							e.printStackTrace();
+							helpMap.remove(requester);
+							startMap.remove(requester);
 						} catch (UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+							helpMap.remove(requester);
+							startMap.remove(requester);
 						}
 
 						for (int i = 0; i < 8; i++) {
@@ -272,13 +277,15 @@ public class UserServiceImpl implements UserService {
 								e1.printStackTrace();
 							}
 							if (helpMap.get(requester) != null) {
-								String token = helpuMapper.getToken(requester);
+								String token = helpuMapper.getTokenByIdx(requester);
 								String providerName = helpuMapper.getUserName(helpMap.get(requester));
 								startMap.remove(requester);
 								try {
 									pushService.sendInfo(token, providerName + "님으로부터 요청 승낙을 받았습니다.");
 								} catch (JSONException | UnsupportedEncodingException e) {
 									e.printStackTrace();
+									helpMap.remove(requester);
+									startMap.remove(requester);
 								}
 
 								return;
@@ -390,6 +397,17 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		helpuMapper.setAlarm(map);
+
+		return wrapper;
+		
+	}
+
+	@Override
+	public ResponseWrapper userLogout(Logout param) {
+
+		ResponseWrapper wrapper = createWrapper();
+		
+		helpuMapper.updateLogout(param);
 
 		return wrapper;
 		

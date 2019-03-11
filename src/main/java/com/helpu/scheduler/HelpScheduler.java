@@ -49,8 +49,8 @@ public class HelpScheduler {
 
 				if (distance < 50) {
 
-					String requesterToken = helpuMapper.getToken(requester);
-					String providerToken = helpuMapper.getToken(provider);
+					String requesterToken = helpuMapper.getTokenByIdx(requester);
+					String providerToken = helpuMapper.getTokenByIdx(provider);
 
 					pushService.sendInfo(requesterToken, "도움 받기가 성공적으로 끝났습니다.");
 					pushService.helpComplete(providerToken);

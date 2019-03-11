@@ -15,6 +15,7 @@ import com.helpu.model.request.HelpAccept;
 import com.helpu.model.request.HelpRegistration;
 import com.helpu.model.request.HelpRequest;
 import com.helpu.model.request.Login;
+import com.helpu.model.request.Logout;
 import com.helpu.model.request.ProviderLocationRegistration;
 import com.helpu.model.request.ProviderRemove;
 import com.helpu.model.request.SetAlarm;
@@ -62,6 +63,18 @@ public class HelpUController {
 	public ResponseEntity<ResponseWrapper> userLogin(@RequestBody Login param) {
 		
 		ResponseWrapper response = userService.userLogin(param);
+		
+		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
+	/*
+	 * 로그아웃 API
+	 * */
+	@RequestMapping(value = "/user/logout", method = RequestMethod.POST)
+	public ResponseEntity<ResponseWrapper> userLogout(@RequestBody Logout param) {
+		
+		ResponseWrapper response = userService.userLogout(param);
 		
 		return new ResponseEntity<ResponseWrapper>(response, HttpStatus.OK);
 		

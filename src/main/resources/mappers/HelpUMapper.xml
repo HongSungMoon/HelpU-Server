@@ -167,7 +167,8 @@
     	update
     		user
     	set
-    		count = count + 1
+    		count = count + 1,
+    		point = point + 10
     	where
     		id = #{id}
     </update>
@@ -207,5 +208,32 @@
     	where
     		id = #{id}
     </update>
+    
+    <update id="updateGrade" parameterType="String">
+    	update
+    		user
+    	set
+    		grade = grade - 1
+    	where
+    		id = #{id}
+    </update>
+    
+    <select id="getPoint" parameterType="String" resultType="Integer">
+    	select
+    		point
+    	from
+    		user
+    	where
+    		id = #{id}
+    </select>
+    
+    <select id="getGrade" parameterType="String" resultType="Integer">
+    	select
+    		grade
+    	from
+    		user
+    	where
+    		id = #{id}
+    </select>
     
 </mapper>

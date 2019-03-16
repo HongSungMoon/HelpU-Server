@@ -28,6 +28,8 @@ public class HelpScheduler {
 	private AndroidPushNotificationsServiceImpl pushService;
 
 	public DistanceUtil distanceUtil = new DistanceUtil();
+	
+	public static ConcurrentHashMap<String, Integer> stopMap = new ConcurrentHashMap<>();
 
 	@Scheduled(fixedDelay = 10000)
 	public void helpScheduler() throws UnsupportedEncodingException, JSONException {
@@ -56,6 +58,13 @@ public class HelpScheduler {
 					pushService.helpComplete(providerToken);
 
 					helpuMapper.addHelpCount(provider);
+					
+					int grade = helpuMapper.getGrade(provider);
+					int point = helpuMapper.getPoint(provider);
+					
+					if(grade != 1 && (point + 10) % 100 == 0) {
+						helpuMapper.updateGrade(provider);
+					}
 
 					UserServiceImpl.helpMap.remove(requester);
 					System.out.println("[scheduler] Success!!!!!!!!!!!!1");

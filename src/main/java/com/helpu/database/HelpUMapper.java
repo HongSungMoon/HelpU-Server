@@ -54,5 +54,11 @@ public interface HelpUMapper {
 	void updateLogin(Login param);
 
 	void updateLogout(Logout param);
+	
+	void updateGrade(String provider);
+	
+	int getPoint(String provider);
+	
+	int getGrade(String provider);
 
 }

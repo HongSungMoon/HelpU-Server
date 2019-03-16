@@ -226,13 +226,14 @@ public class UserServiceImpl implements UserService {
 				for (int k = 0; k < num; k++) {
 					while (true) {
 						if (distances.size() == 0) {
-							String token = helpuMapper.getToken(requester);
+							String token = helpuMapper.getTokenByIdx(requester);
 							if (!helpMap.containsKey(requester))
 								// helpMap.remove(requester);
 								try {
 									pushService.sendInfo(token, "도움 제공자 요청에 실패하였습니다.");
 								} catch (JSONException | UnsupportedEncodingException e) {
 									// TODO Auto-generated catch block
+									startMap.remove(requester);
 									e.printStackTrace();
 								}
 							startMap.remove(requester);
@@ -269,7 +270,7 @@ public class UserServiceImpl implements UserService {
 							startMap.remove(requester);
 						}
 
-						for (int i = 0; i < 8; i++) {
+						for (int i = 0; i < 4; i++) {
 							try {
 								Thread.sleep(5000);
 							} catch (InterruptedException e1) {

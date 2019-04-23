@@ -41,6 +41,22 @@ public class HelpScheduler {
 			String provider = UserServiceImpl.helpMap.get(requester);
 
 			if (!UserServiceImpl.startMap.containsKey(requester)) {
+				
+				if(!stopMap.contains(requester)) {
+					stopMap.put(requester, 0);
+				} else {
+					stopMap.put(requester, stopMap.get(requester) + 1);
+				}
+				
+				if(stopMap.get(requester) > 1000) {
+					stopMap.remove(requester);
+					UserServiceImpl.helpMap.remove(requester);
+					String requesterToken = helpuMapper.getTokenByIdx(requester);
+					String providerToken = helpuMapper.getTokenByIdx(provider);
+					pushService.sendInfo(requesterToken, "도움 제공자가 도움 제공에 실피해였습니다.");
+					pushService.sendInfo(providerToken, "오랜 기간도움을 제공하지 않아 도움 제공에 실패하였습니다.");
+					return;
+				}
 
 				String requesterLocation = UserServiceImpl.locationMap.get(requester);
 				String providerLocation = UserServiceImpl.locationMap.get(provider);
@@ -50,10 +66,10 @@ public class HelpScheduler {
 				System.out.println("[scheduler] distance = " + distance);
 
 				if (distance < 50) {
-
+					
 					String requesterToken = helpuMapper.getTokenByIdx(requester);
 					String providerToken = helpuMapper.getTokenByIdx(provider);
-
+					
 					pushService.sendInfo(requesterToken, "도움 받기가 성공적으로 끝났습니다.");
 					pushService.helpComplete(providerToken);
 
